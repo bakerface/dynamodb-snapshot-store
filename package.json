@@ -1,0 +1,57 @@
+{
+  "name": "dynamodb-snapshot-store",
+  "version": "2.2.0",
+  "description": "A snapshot store implementation on top of Amazon DynamoDB",
+  "author": "Chris Baker <mail.chris.baker@gmail.com>",
+  "license": "MIT",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bakerface/dynamodb-snapshot-store.git"
+  },
+  "scripts": {
+    "test": "xo && nyc --check-coverage _mocha",
+    "codeclimate": "codeclimate-test-reporter < coverage/lcov.info"
+  },
+  "nyc": {
+    "branches": 100,
+    "functions": 100,
+    "lines": 100,
+    "statements": 100,
+    "reporter": [
+      "lcov",
+      "text"
+    ]
+  },
+  "xo": {
+    "envs": [
+      "mocha",
+      "node"
+    ],
+    "space": true,
+    "rules": {
+      "array-bracket-spacing": [
+        "error",
+        "always"
+      ],
+      "brace-style": [
+        "error",
+        "stroustrup"
+      ],
+      "object-curly-spacing": [
+        "error",
+        "always"
+      ]
+    }
+  },
+  "devDependencies": {
+    "codeclimate-test-reporter": "^0.4.0",
+    "dynalite": "^1.1.0",
+    "mocha": "^3.2.0",
+    "nyc": "^10.1.2",
+    "xo": "^0.17.1"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.9.0"
+  }
+}
