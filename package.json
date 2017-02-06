@@ -1,6 +1,6 @@
 {
   "name": "dynamodb-snapshot-store",
-  "version": "2.2.0",
+  "version": "1.0.1",
   "description": "A snapshot store implementation on top of Amazon DynamoDB",
   "author": "Chris Baker <mail.chris.baker@gmail.com>",
   "license": "MIT",

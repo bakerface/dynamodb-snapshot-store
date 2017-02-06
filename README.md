@@ -7,7 +7,7 @@
 
 This package provides a simple snapshot store implementation on top of Amazon
 DynamoDB. This is meant to be a general purpose package, and makes no
-assumptions about the structure or type of your aggregate states. The states are
+assumptions about the structure or type of your states. The states are
 serialized to JSON when stored, and deserialized automatically when fetching.
 For a few examples, view the samples below:
 
@@ -23,19 +23,19 @@ var snapshotStore = new SnapshotStore({
 ```
 
 ### snapshotStore.store(snapshot)
-An atomic write of the aggregate state to the snapshot store.
+An atomic write of a snapshot to the store.
 
 ``` javascript
-var commit = {
+var snapshot = {
   snapshotId: '00000000-0000-0000-0000-000000000000',
   state: {
     foo: 'bar'  
   }
 };
 
-snapshotStore.store(commit)
+snapshotStore.store(snapshot)
   .then(function () {
-    // the state was committed to the snapshot store
+    // the snapshot was stored
   })
   .catch(function (err) {
     // something went wrong
