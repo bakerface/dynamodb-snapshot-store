@@ -87,12 +87,12 @@ describe('when the tables are created', function () {
       });
 
       var a = {
-        snapshotId: '00000000-0000-0000-0000-000000000000',
+        aggregateId: '00000000-0000-0000-0000-000000000000',
         state: 'one'
       };
 
       var b = {
-        snapshotId: '11111111-1111-1111-1111-111111111111',
+        aggregateId: '11111111-1111-1111-1111-111111111111',
         state: 'two'
       };
 
@@ -107,7 +107,7 @@ describe('when the tables are created', function () {
 
     it('can fetch a snapshot that has not been stored', function () {
       var options = {
-        snapshotId: '22222222-2222-2222-2222-222222222222'
+        aggregateId: '22222222-2222-2222-2222-222222222222'
       };
 
       return this.snapshotStore.fetch(options)
@@ -118,13 +118,13 @@ describe('when the tables are created', function () {
 
     it('can fetch the state for a single snapshot', function () {
       var options = {
-        snapshotId: '00000000-0000-0000-0000-000000000000'
+        aggregateId: '00000000-0000-0000-0000-000000000000'
       };
 
       return this.snapshotStore.fetch(options)
         .then(function (snapshot) {
           assert.deepEqual(snapshot, {
-            snapshotId: '00000000-0000-0000-0000-000000000000',
+            aggregateId: '00000000-0000-0000-0000-000000000000',
             createdAt: 0,
             state: 'one'
           });
@@ -133,12 +133,12 @@ describe('when the tables are created', function () {
 
     it('can update a snapshot', function () {
       var snapshot = {
-        snapshotId: '00000000-0000-0000-0000-000000000000',
+        aggregateId: '00000000-0000-0000-0000-000000000000',
         state: 'three'
       };
 
       var options = {
-        snapshotId: '00000000-0000-0000-0000-000000000000'
+        aggregateId: '00000000-0000-0000-0000-000000000000'
       };
 
       var snapshotStore = new SnapshotStore({
@@ -158,7 +158,7 @@ describe('when the tables are created', function () {
         })
         .then(function (snapshot) {
           assert.deepEqual(snapshot, {
-            snapshotId: '00000000-0000-0000-0000-000000000000',
+            aggregateId: '00000000-0000-0000-0000-000000000000',
             createdAt: 2,
             state: 'three'
           });

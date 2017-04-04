@@ -27,7 +27,7 @@ An atomic write of a snapshot to the store.
 
 ``` javascript
 var snapshot = {
-  snapshotId: '00000000-0000-0000-0000-000000000000',
+  aggregateId: '00000000-0000-0000-0000-000000000000',
   state: {
     foo: 'bar'  
   }
@@ -49,14 +49,14 @@ Fetches the aggregate state from the snapshot store.
 
 ``` javascript
 var options = {
-  snapshotId: '00000000-0000-0000-0000-000000000000'
+  aggregateId: '00000000-0000-0000-0000-000000000000'
 };
 
 snapshotStore.fetch(options)
   .then(function (snapshot) {
     // =>
     {
-      snapshotId: '00000000-0000-0000-0000-000000000000',
+      aggregateId: '00000000-0000-0000-0000-000000000000',
       createdAt: 946684800000,
       state: {
         foo: 'bar'

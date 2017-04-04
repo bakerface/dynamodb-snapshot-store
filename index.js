@@ -38,14 +38,22 @@ SnapshotStore.prototype.createTable = function () {
     TableName: this.tableName,
     AttributeDefinitions: [
       {
-        AttributeName: 'snapshotId',
+        AttributeName: 'aggregateId',
         AttributeType: 'S'
+      },
+      {
+        AttributeName: 'revision',
+        AttributeType: 'N'
       }
     ],
     KeySchema: [
       {
-        AttributeName: 'snapshotId',
+        AttributeName: 'aggregateId',
         KeyType: 'HASH'
+      },
+      {
+        AttributeName: 'revision',
+        KeyType: 'RANGE'
       }
     ],
     ProvisionedThroughput: {
@@ -65,15 +73,17 @@ SnapshotStore.prototype.deleteTable = function () {
   return this.database.deleteTable(params).promise();
 };
 
-SnapshotStore.prototype.store = function (snapshot) {
+SnapshotStore.prototype.store = function (aggregateId, revision, version, state) {
   var createdAt = this.now();
 
   var params = {
     TableName: this.tableName,
     Item: {
-      snapshotId: { S: snapshot.snapshotId },
+      aggregateId: { S: aggregateId },
+      revision: { N: revision.toString() },
+      version: { N: version.toString() },
       createdAt: { N: createdAt.toString() },
-      state: { S: JSON.stringify(snapshot.state) }
+      state: { S: JSON.stringify(state) },
     },
     ReturnValues: 'NONE'
   };
@@ -81,12 +91,13 @@ SnapshotStore.prototype.store = function (snapshot) {
   return this.database.putItem(params).promise();
 };
 
-SnapshotStore.prototype.fetch = function (options) {
+SnapshotStore.prototype.fetch = function (aggregateId, revision) {
   var params = {
     TableName: this.tableName,
     ConsistentRead: true,
     Key: {
-      snapshotId: { S: options.snapshotId }
+      aggregateId: { S: aggregateId },
+      revision: { N: revision.toString() },
     }
   };
 
@@ -94,7 +105,9 @@ SnapshotStore.prototype.fetch = function (options) {
     .then(function (response) {
       if (response.Item) {
         return {
-          snapshotId: response.Item.snapshotId.S,
+          aggregateId: response.Item.aggregateId.S,
+          revision: parseInt(response.Item.revision.N, 10),
+          version: parseInt(response.Item.version.N, 10),
           createdAt: parseInt(response.Item.createdAt.N, 10),
           state: JSON.parse(response.Item.state.S)
         };
