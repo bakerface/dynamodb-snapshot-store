@@ -83,7 +83,7 @@ SnapshotStore.prototype.store = function (aggregateId, revision, version, state)
       revision: { N: revision.toString() },
       version: { N: version.toString() },
       createdAt: { N: createdAt.toString() },
-      state: { S: JSON.stringify(state) },
+      state: { S: JSON.stringify(state) }
     },
     ReturnValues: 'NONE'
   };
@@ -97,7 +97,7 @@ SnapshotStore.prototype.fetch = function (aggregateId, revision) {
     ConsistentRead: true,
     Key: {
       aggregateId: { S: aggregateId },
-      revision: { N: revision.toString() },
+      revision: { N: revision.toString() }
     }
   };
 
