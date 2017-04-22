@@ -88,29 +88,34 @@ describe('when the tables are created', function () {
 
       var a = {
         aggregateId: '00000000-0000-0000-0000-000000000000',
+        revision: 0,
+        version: 1,
         state: 'one'
       };
 
       var b = {
         aggregateId: '11111111-1111-1111-1111-111111111111',
+        revision: 0,
+        version: 1,
         state: 'two'
       };
 
       return Promise.resolve()
         .then(function () {
-          return snapshotStore.store(a);
+          return snapshotStore.store(a.aggregateId, a.revision, a.version, a.state);
         })
         .then(function () {
-          return snapshotStore.store(b);
+          return snapshotStore.store(b.aggregateId, b.revision, b.version, b.state);
         });
     });
 
     it('can fetch a snapshot that has not been stored', function () {
       var options = {
-        aggregateId: '22222222-2222-2222-2222-222222222222'
+        aggregateId: '22222222-2222-2222-2222-222222222222',
+        revision: 0
       };
 
-      return this.snapshotStore.fetch(options)
+      return this.snapshotStore.fetch(options.aggregateId, options.revision)
         .then(function (snapshot) {
           assert.deepEqual(snapshot);
         });
@@ -118,27 +123,33 @@ describe('when the tables are created', function () {
 
     it('can fetch the state for a single snapshot', function () {
       var options = {
-        aggregateId: '00000000-0000-0000-0000-000000000000'
+        aggregateId: '00000000-0000-0000-0000-000000000000',
+        revision: 0
       };
 
-      return this.snapshotStore.fetch(options)
+      return this.snapshotStore.fetch(options.aggregateId, options.revision)
         .then(function (snapshot) {
           assert.deepEqual(snapshot, {
             aggregateId: '00000000-0000-0000-0000-000000000000',
             createdAt: 0,
+            revision: 0,
+            version: 1,
             state: 'one'
           });
         });
     });
 
     it('can update a snapshot', function () {
-      var snapshot = {
+      var a = {
         aggregateId: '00000000-0000-0000-0000-000000000000',
+        revision: 0,
+        version: 1,
         state: 'three'
       };
 
       var options = {
-        aggregateId: '00000000-0000-0000-0000-000000000000'
+        aggregateId: '00000000-0000-0000-0000-000000000000',
+        revision: 0
       };
 
       var snapshotStore = new SnapshotStore({
@@ -152,14 +163,16 @@ describe('when the tables are created', function () {
         }
       });
 
-      return snapshotStore.store(snapshot)
+      return snapshotStore.store(a.aggregateId, a.revision, a.version, a.state)
         .then(function () {
-          return snapshotStore.fetch(options);
+          return snapshotStore.fetch(options.aggregateId, options.revision);
         })
         .then(function (snapshot) {
           assert.deepEqual(snapshot, {
             aggregateId: '00000000-0000-0000-0000-000000000000',
             createdAt: 2,
+            version: 1,
+            revision: 0,
             state: 'three'
           });
         });
